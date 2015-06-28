@@ -145,7 +145,12 @@ if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 			password : '6210dd278617490982a9009e5013e131',
 			database : 'QfaOCnZqSKEDTmhGXMpG',
 			charset  : 'utf8'
-		}		
+		},
+		debug: false,
+        pool: {
+			min: 0,
+			max: 0
+        }
 	};
 	console.log('####### database switch to mysql for BAE');
 }
