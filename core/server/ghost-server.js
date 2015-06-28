@@ -77,7 +77,7 @@ GhostServer.prototype.start = function (externalApp) {
         });
         self.httpServer.on('connection', self.connection.bind(self));
         self.httpServer.on('listening', function () {
-            self.logStartMessages();
+            //self.logStartMessages(); //this will crash BAE
             clearTimeout(self.upgradeWarning);
             resolve(self);
         });
