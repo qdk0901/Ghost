@@ -135,4 +135,17 @@ config = {
     }
 };
 
+if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
+	config.development.database = {
+		client: 'mysql',
+		connection: {
+			host     : 'sqld.duapp.com',
+			user     : '01e5d6a04c35477b840f57e0784e9568',
+			password : '6210dd278617490982a9009e5013e131',
+			database : 'QfaOCnZqSKEDTmhGXMpG',
+			charset  : 'utf8'
+		}		
+	};
+}
+
 module.exports = config;
