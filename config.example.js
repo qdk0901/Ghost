@@ -140,12 +140,14 @@ if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 		client: 'mysql',
 		connection: {
 			host     : 'sqld.duapp.com',
+			port	: '4050',
 			user     : '01e5d6a04c35477b840f57e0784e9568',
 			password : '6210dd278617490982a9009e5013e131',
 			database : 'QfaOCnZqSKEDTmhGXMpG',
 			charset  : 'utf8'
 		}		
 	};
+	console.log('####### database switch to mysql for BAE');
 }
 
 module.exports = config;
