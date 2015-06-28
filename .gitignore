@@ -63,8 +63,8 @@ config.js
 !/core/client/app/services/config.js
 
 # Built asset files
-/core/built
-/core/server/views/default.hbs
+#/core/built
+#/core/server/views/default.hbs
 
 # Coverage reports
 coverage.html
