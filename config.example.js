@@ -141,8 +141,8 @@ if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 		connection: {
 			host     : 'sqld.duapp.com',
 			port	: '4050',
-			user     : '01e5d6a04c35477b840f57e0784e9568',
-			password : '6210dd278617490982a9009e5013e131',
+			user     : '471e718af6ac492f80a14112beb46b27',
+			password : '38a60ebc773c40718bc1484da8ecd187',
 			database : 'QfaOCnZqSKEDTmhGXMpG',
 			charset  : 'utf8'
 		},
@@ -161,8 +161,8 @@ config.development.storage = {
     config: {
 		baiduBce: {
 			credentials: {
-				ak: 'b2c13c638be641ea98bd7bd335a7e3b4',
-				sk: 'ab948346d10e4226a3df6e4e389b96df'
+				ak: '471e718af6ac492f80a14112beb46b27',
+				sk: '38a60ebc773c40718bc1484da8ecd187'
 			},
 			endpoint: 'http://bj.bcebos.com',
 			bucket: 'transing',
