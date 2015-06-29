@@ -26,6 +26,8 @@ util.inherits(LocalFileStore, baseStore);
 // - returns a promise which ultimately returns the full url to the uploaded image
 LocalFileStore.prototype.save = function (image, targetDir) {
 	var key = image.name;
+	
+	console.log('#######' + image.path);
 	return client.putObjectFromFile(bucket, key, image.path)
 	.then(function() {
 		return prefix + '/' + key;
