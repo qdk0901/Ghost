@@ -155,4 +155,28 @@ if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 	console.log('####### database switch to mysql for BAE');
 }
 
+config.development.storage = {
+    active: 'baidu-bce',
+	//active: 'aliyun-oss',
+    config: {
+		baiduBce: {
+			credentials: {
+				ak: '01e5d6a04c35477b840f57e0784e9568',
+				sk: '6210dd278617490982a9009e5013e131'
+			},
+			endpoint: 'http://bj.bcebos.com',
+			bucket: 'transing',
+			objectUrlPrefix: 'http://transing.bj.bcebos.com'
+		},
+		aliyunOss: {
+		  accessKeyId: "B5XbMzCAn484ATTL",
+		  secretAccessKey: "ROyNOrsE6IztYiTM8qUe4V3PYIxKp2",
+		  endpoint: 'http://oss-cn-shenzhen.aliyuncs.com',
+		  apiVersion: '2013-10-15',
+		  bucket: 'xtrans',
+		  objectUrlPrefix: 'http://xtrans.oss-cn-shenzhen.aliyuncs.com'
+		}
+    }
+}
+
 module.exports = config;
