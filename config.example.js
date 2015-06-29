@@ -161,8 +161,8 @@ config.development.storage = {
     config: {
 		baiduBce: {
 			credentials: {
-				ak: '01e5d6a04c35477b840f57e0784e9568',
-				sk: '6210dd278617490982a9009e5013e131'
+				ak: 'b2c13c638be641ea98bd7bd335a7e3b4',
+				sk: 'ab948346d10e4226a3df6e4e389b96df'
 			},
 			endpoint: 'http://bj.bcebos.com',
 			bucket: 'transing',
