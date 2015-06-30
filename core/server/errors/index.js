@@ -108,7 +108,7 @@ errors = {
             if (_.isObject(err) && _.isString(err.message)) {
                 err = err.message;
             } else {
-                err = '++An unknown error occurred.';
+                err = 'An unknown error occurred.';
             }
         }
 

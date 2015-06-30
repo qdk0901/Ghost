@@ -152,7 +152,15 @@ if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 			max: 0
         }
 	};
-	console.log('####### database switch to mysql for BAE');
+	console.log('database switch to mysql for BAE');
+	
+	process.on('uncaughtException', function(err) {
+		if(err.errno == 'ECONNRESET'){
+			console.log('ignored ECONNRESET error');
+		} else {
+			throw err;
+		}
+	});
 }
 
 config.development.storage = {
