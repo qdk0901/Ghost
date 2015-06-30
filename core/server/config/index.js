@@ -151,6 +151,13 @@ ConfigManager.prototype.set = function (config) {
     if (!knexInstance && this._config.database && this._config.database.client) {
         configureDriver(this._config.database.client);
         knexInstance = knex(this._config.database);
+		knexInstance.client.on('error', function(err) {
+		  if (err.errno != 'ECONNRESET') {
+			throw err;
+		  } else {
+			//do nothing
+		  }
+		});
     }
 
     // Protect against accessing a non-existant object.
