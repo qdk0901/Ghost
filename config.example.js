@@ -146,6 +146,10 @@ if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 			database : 'QfaOCnZqSKEDTmhGXMpG',
 			charset  : 'utf8'
 		},
+		pool : {
+			min : 0,
+			max : 0,
+		},
 		debug: false,
 	};
 	console.log('database switch to mysql for BAE');
