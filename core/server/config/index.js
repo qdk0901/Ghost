@@ -152,6 +152,7 @@ ConfigManager.prototype.set = function (config) {
         configureDriver(this._config.database.client);
         knexInstance = knex(this._config.database);
 		knexInstance.client.on('error', function(err) {
+			console.log('+++++++++++' + err);
 		  if (err.errno != 'ECONNRESET') {
 			throw err;
 		  } else {
