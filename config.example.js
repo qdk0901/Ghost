@@ -148,7 +148,7 @@ if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 		},
 		pool : {
 			min : 0,
-			max : 0,
+			max : 0
 		},
 		debug: false,
 	};
