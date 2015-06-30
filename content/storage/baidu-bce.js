@@ -27,15 +27,18 @@ util.inherits(LocalFileStore, baseStore);
 LocalFileStore.prototype.save = function (image, targetDir) {
 	var key = image.name;
 	
-	console.log('#######' + image.path);
-	return client.putObjectFromFile(bucket, key, image.path)
-	.then(function() {
-		return prefix + '/' + key;
+	return Promise.promisify(fs.stat)(image.path).then(function(err, stats) {
+		//just place a stat here to fix badDigest problem
+		return client.putObjectFromFile(bucket, key, image.path)
+		.then(function() {
+			return prefix + '/' + key;
+		})
+		.catch(function(error) {
+			console.error(error);
+			return Promise.reject(error);
+		});	
 	})
-	.catch(function(error) {
-		console.error(error);
-		return Promise.reject(error);
-	});
+
 };
 
 LocalFileStore.prototype.exists = function (filename) {

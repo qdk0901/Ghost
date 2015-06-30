@@ -61,6 +61,7 @@ Post = ghostBookshelf.Model.extend({
 
         // Ensures local copy of permalink setting is kept up to date
         this.on('fetching', getPermalinkSetting);
+        this.on('fetching:collection', getPermalinkSetting);
 
         this.on('created', function onCreated(model) {
             model.emitChange('added');
@@ -239,7 +240,7 @@ Post = ghostBookshelf.Model.extend({
     },
 
     // Relations
-    author_id: function authorId() {
+    author: function author() {
         return this.belongsTo('User', 'author_id');
     },
 
@@ -401,9 +402,9 @@ Post = ghostBookshelf.Model.extend({
         var withNext = _.contains(options.include, 'next'),
             withPrev = _.contains(options.include, 'previous');
 
-        data = _.extend({
+        data = _.defaults(data || {}, {
             status: 'published'
-        }, data || {});
+        });
 
         if (data.status === 'all') {
             delete data.status;

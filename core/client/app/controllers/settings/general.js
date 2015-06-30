@@ -3,8 +3,21 @@ import randomPassword from 'ghost/utils/random-password';
 
 export default Ember.Controller.extend({
     notifications: Ember.inject.service(),
+    config: Ember.inject.service(),
 
-    selectedTheme: null,
+    selectedTheme: Ember.computed('model.activeTheme', 'themes', function () {
+        var activeTheme = this.get('model.activeTheme'),
+            themes = this.get('themes'),
+            selectedTheme;
+
+        themes.forEach(function (theme) {
+            if (theme.name === activeTheme) {
+                selectedTheme = theme;
+            }
+        });
+
+        return selectedTheme;
+    }),
 
     logoImageSource: Ember.computed('model.logo', function () {
         return this.get('model.logo') || '';
@@ -51,9 +64,11 @@ export default Ember.Controller.extend({
 
     actions: {
         save: function () {
-            var notifications = this.get('notifications');
+            var notifications = this.get('notifications'),
+                config = this.get('config');
 
             return this.get('model').save().then(function (model) {
+                config.set('blogTitle', model.get('title'));
                 notifications.showSuccess('Settings successfully saved.');
 
                 return model;
@@ -68,6 +83,10 @@ export default Ember.Controller.extend({
             if (postsPerPage < 1 || postsPerPage > 1000 || isNaN(postsPerPage)) {
                 this.set('model.postsPerPage', 5);
             }
+        },
+
+        setTheme: function (theme) {
+            this.set('model.activeTheme', theme.name);
         }
     }
 });
