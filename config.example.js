@@ -138,6 +138,7 @@ config = {
 if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 	config.development.database = {
 		client: 'mysql',
+        /*
 		connection: {
 			host     : 'sqld.duapp.com',
 			port	: '4050',
@@ -146,10 +147,20 @@ if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 			database : 'QfaOCnZqSKEDTmhGXMpG',
 			charset  : 'utf8'
 		},
-		pool : {
+        pool : {
 			min : 0,
 			max : 0
 		},
+        */
+        connection: {
+			host     : 'svrid3b8bp26xb9.mysql.duapp.com',
+			port	: '10396',
+			user     : '471e718af6ac492f80a14112beb46b27',
+			password : '38a60ebc773c40718bc1484da8ecd187',
+			database : 'svrid3b8bp26xb9',
+			charset  : 'utf8'
+		},
+
 		debug: false,
 	};
 	console.log('database switch to mysql for BAE');

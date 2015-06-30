@@ -151,17 +151,6 @@ ConfigManager.prototype.set = function (config) {
     if (!knexInstance && this._config.database && this._config.database.client) {
         configureDriver(this._config.database.client);
         knexInstance = knex(this._config.database);
-		knexInstance.client.connectionErrorHandler = function(client, connection, err) {
-            if (err.errno == 'ECONNRESET') {
-                console.log('ignore ECONNRESET');
-                return;
-            }
-            if (connection && err && err.fatal) {
-                if (connection.__knex__disposed) return;
-                connection.__knex__disposed = true;
-                client.pool.genericPool.destroy(connection);
-            }
-		}
     }
 
     // Protect against accessing a non-existant object.
