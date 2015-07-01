@@ -56,6 +56,10 @@
 
         {{/author}}
 
+        <section class="post-comments">
+            <div class="ds-thread" data-thread-key="{{slug}}" data-title="{{{title}}}" data-url="{{url absolute="true"}}"></div>
+        </section>
+    
             <section class="share">
                 <h4>Share this post</h4>
                 <a class="icon-twitter" href="https://twitter.com/share?text={{encode title}}&amp;url={{url absolute="true"}}"
@@ -97,3 +101,15 @@
 </aside>
 
 {{/post}}
+
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"transing"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
