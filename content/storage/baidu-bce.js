@@ -25,11 +25,17 @@ util.inherits(LocalFileStore, baseStore);
 // - image is the express image object
 // - returns a promise which ultimately returns the full url to the uploaded image
 LocalFileStore.prototype.save = function (image, targetDir) {
+    targetDir = targetDir || this.getTargetDir(config.paths.imagesPath);
+    var targetFilename;
 	var key = image.name;
-	
-	return Promise.promisify(fs.stat)(image.path).then(function(err, stats) {
-		//just place a stat here to fix badDigest problem
-		return client.putObjectFromFile(bucket, key, image.path)
+    
+	return this.getUniqueFileName(this, image, targetDir).then(function (filename) {
+        targetFilename = filename;
+        return Promise.promisify(fs.mkdirs)(targetDir);
+    }).then(function () {
+        return Promise.promisify(fs.copy)(image.path, targetFilename);
+    }).then(function () {
+		return client.putObjectFromFile(bucket, key, targetFilename)
 		.then(function() {
 			return prefix + '/' + key;
 		})
