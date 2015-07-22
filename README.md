@@ -1,116 +1,78 @@
-<a href="https://github.com/TryGhost/Ghost"><img src="https://cloud.githubusercontent.com/assets/120485/6622822/c4c639fe-c8e7-11e4-9e64-5bec06c8b4c3.png" alt="Ghost" /></a>
-<a href="https://travis-ci.org/TryGhost/Ghost"><img align="right" src="https://travis-ci.org/TryGhost/Ghost.svg?branch=master" alt="Build status" /></a>
+####百度BAE上部署Ghost
+#####首先申请BAE账号，然后来到[BAE控制台](http://console.bce.baidu.com/bae/#/bae/app/list)添加部署
+![](http://transing.bj.bcebos.com/bae-console.png)
+#######注意内存要选256M的，Ghost需要的内存超过140M，代码版本工具选git
+![](http://transing.bj.bcebos.com/bae-application.png)
 
-![Ghost Screenshot](https://cloud.githubusercontent.com/assets/120485/6626466/6dae46b2-c8ff-11e4-8c7c-8dd63b215f7b.jpg)
+#####添加私有mysql服务，来到[控制台](http://console.bce.baidu.com/bae/#/bae/service/create~type=MySQL)
+######选私有mysql，因为免费的mysql有长连接问题，需要修改到knex module，这里没办法改。网上改连接池数目到0，或者捕捉ERESET异常的办法都没有效。
+![](http://transing.bj.bcebos.com/bae-mysql.png)
+添加完之后，可以在[扩展服务列表](http://console.bce.baidu.com/bae/#/bae/service/list)里,找到新添加的数据库，里面可以看到数据库地址，这个地址等下要填到配置文件里的
+![](http://transing.bj.bcebos.com/mysql-info.png)
+#####申请开通BOS(对象存储)，然后来到[BOS控制台](http://console.bce.baidu.com/bos/#/bos/list)新建Bucket
+######新建一个你自己的bucket，等下bucket的名字要填到配置文件里
+![](http://transing.bj.bcebos.com/bos-console.png)
 
-![Ghost is a simple, powerful publishing platform that allows you to share your stories with the world.](https://cloud.githubusercontent.com/assets/120485/6626501/b2bb072c-c8ff-11e4-8e1a-2e78e68fd5c3.png)
+#####获取源码
+######[Ghost项目官方地址](https://github.com/TryGhost/Ghost)，如果不想从官网源码开始改，也可以用[我已经改好的](https://github.com/qdk0901/Ghost.git)
 
-The project is maintained by a non-profit organisation called the **Ghost Foundation**, along with an amazing group of independent [contributors](https://github.com/TryGhost/Ghost/contributors). We're trying to make publishing software that changes the shape of online journalism.
-
-- [Ghost.org](https://ghost.org)
-- [Latest Release](https://ghost.org/download/)
-- [Support](http://support.ghost.org/)
-- [Theme Docs](http://themes.ghost.org)
-- [Contributing Guide](https://github.com/TryGhost/Ghost/blob/master/CONTRIBUTING.md)
-- [Feature Requests](http://ideas.ghost.org/)
-- [Dev Blog](http://dev.ghost.org)
-
-
-# Quick Start Install
-
-Make sure you've installed Node.js - We recommend the latest **Node v0.10.x** release.
-
-Ghost is also compatible with **Node v0.12** and **io.js v1.2**, but please note that these versions are more likely to run into installation problems. May contain nuts. Please use the [forum](https://ghost.org/forum/installation/) for help.
-
-1. Download the [latest release](https://ghost.org/download/) of Ghost
-1. Unzip in the location you want to install
-1. Fire up a terminal
-1. `npm install --production`
-1. Start Ghost!
-    - Local environment: `npm start`
-    - On a server: `npm start --production`
-1. `http://localhost:2368/ghost` :tada:
-
-More [install docs](http://support.ghost.org/installation/) here in case you got stuck.
-
-<a name="getting-started"></a>
-# Developer Install (from git)
-
-Install Node.js. 
-
-```bash
-# Node v0.10.x - full support
-# Node v0.12.x and io.js v1.2 - partial support
-#
-# Choose wisely
 ```
-
-Clone :ghost:
-
-```bash
-git clone git://github.com/tryghost/ghost.git
-cd ghost
+git clone https://github.com/qdk0901/Ghost.git -b baidu_bce_github
+git checkout -b master (新建一个master分支，因为BAE只认master分支)
 ```
+克隆完成如下图
+![](http://transing.bj.bcebos.com/clone-baidu-bce-ghost.png)
+获取BAE部署的git项目地址
+![](http://transing.bj.bcebos.com/bae-git.png)
 
-Install grunt. No prizes here.
 
-```bash
-npm install -g grunt-cli
+#####修改配置文件
+打开config.example.js，主要修改如下内容，其中AK/SK从[安全认证](http://console.bce.baidu.com/iam/#/iam/accesslist)里获取
 ```
+if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
+	config.development.database = {
+		client: 'mysql',
+        connection: {
+			host     : '<private mysql address>',//这里填你的私有mysql地址
+			port	: '10396',
+			user     : '<ak>', //填你的Access key
+			password : '<sk>', //填你的Secret key
+			database : '<database name>', //填你的数据库名
+			charset  : 'utf8'
+		},
 
-Install Ghost. If you're running locally, use [master](https://github.com/TryGhost/Ghost/tree/master). For production, use [stable](https://github.com/TryGhost/Ghost/tree/stable). :no_entry_sign::rocket::microscope:
+		debug: false,
+	};
+	console.log('database switch to mysql for BAE');
+}
 
-```bash
-npm install
+config.development.storage = {
+    active: 'baidu-bce',
+	//active: 'aliyun-oss',
+    config: {
+		baiduBce: {
+			credentials: {
+				ak: '<ak>', //填你的Access key
+				sk: '<sk>' //填你的Secret key
+			},
+			endpoint: 'http://bj.bcebos.com',
+			bucket: '<your bucket>', //填你的Bucket名
+			objectUrlPrefix: 'http://<填你的Bucket名>.bj.bcebos.com'
+		}
+    }
+}
 ```
-
-Build the things!
-
-```bash
-grunt init
+添加BAE git项目作为remote
 ```
-
-Minify that shit for production?
-
-```bash
-grunt prod
+git remote add bae https://git.duapp.com/appidf29vg2kvng
+git pull bae master (把BAE上的东西拖下来合并，之后会package.json有冲突，把冲突解决掉重新提交就可以了)
+git push bae master (把本地代码推送到bae去)
 ```
+代码push完，结果如下图
+![](http://transing.bj.bcebos.com/bae-pull-push.png)
 
-Start your engines.
-
-```bash
-npm start
-
-## running production? Add --production
-```
-
-Congrats! You made it. BTW you can also just `npm install ghost` if you're into that sort of thing. NPM afficionados can also read up on using [Ghost as an NPM module](https://github.com/TryGhost/Ghost/wiki/Using-Ghost-as-an-npm-module).
-
-More general [install docs](http://support.ghost.org/installation/) here in case you got stuck.
+#####一切准备好，就可以到[BAE部署列表](http://console.bce.baidu.com/bae/#/bae/app/list)里去发布项目了，第一次发布会比较久，发布正常后，效果如下
+![](http://transing.bj.bcebos.com/bae-test-ok.png)
 
 
-# Deploying Ghost
 
-![Ghost(Pro) + DigitalOcean](https://cloud.githubusercontent.com/assets/120485/8180331/d6674e32-1414-11e5-8ce4-2250e9994906.png)
-
-Save yourself time and headaches with our fully managed <strong><a href=“https://ghost.org/pricing/“>Ghost(Pro)</a></strong> service. Deploy a new instance of Ghost in a couple of clicks running on [DigitalOcean](https://digitalocean.com)’s rock solid infrastructure, with a worldwide CDN thrown in at no extra charge.
-
-All revenue from **Ghost(Pro**) goes to the Ghost Foundation, the non-profit org which funds the maintenance and further development of Ghost.
-
-[Other options](http://support.ghost.org/deploying-ghost/) are also available if you prefer playing around with servers by yourself.
-
-
-# Staying Up to Date
-
-When a new version of Ghost comes out, you'll want to look over these [upgrade instructions](http://support.ghost.org/how-to-upgrade/) for what to do next.
-
-You can talk to other Ghost users on [our forums](https://ghost.org/forum) or chat with Ghost developers in our [public Slack team](https://ghost.org/slack/) (it's pretty awesome). We have a public meeting every Tuesday at 5:30pm London time.
-
-New releases are announced on the [dev blog](http://dev.ghost.org/tag/releases/). You can subscribe by email or follow [@TryGhost_Dev](https://twitter.com/tryghost_dev) on Twitter, if you prefer your updates bite-sized and facetious.
-
-:saxophone::turtle:
-
-
-# Copyright & License
-
-Copyright (c) 2013-2015 Ghost Foundation - Released under the [MIT license](LICENSE).
