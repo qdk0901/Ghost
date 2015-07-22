@@ -138,26 +138,12 @@ config = {
 if (process.env.SERVER_SOFTWARE == 'bae/3.0') {
 	config.development.database = {
 		client: 'mysql',
-        /*
-		connection: {
-			host     : 'sqld.duapp.com',
-			port	: '4050',
-			user     : '471e718af6ac492f80a14112beb46b27',
-			password : '38a60ebc773c40718bc1484da8ecd187',
-			database : 'QfaOCnZqSKEDTmhGXMpG',
-			charset  : 'utf8'
-		},
-        pool : {
-			min : 0,
-			max : 0
-		},
-        */
         connection: {
-			host     : 'svrid3b8bp26xb9.mysql.duapp.com',
+			host     : '<private mysql address>',
 			port	: '10396',
-			user     : '471e718af6ac492f80a14112beb46b27',
-			password : '38a60ebc773c40718bc1484da8ecd187',
-			database : 'svrid3b8bp26xb9',
+			user     : '<ak>',
+			password : '<sk>',
+			database : '<database name>',
 			charset  : 'utf8'
 		},
 
@@ -172,20 +158,12 @@ config.development.storage = {
     config: {
 		baiduBce: {
 			credentials: {
-				ak: '471e718af6ac492f80a14112beb46b27',
-				sk: '38a60ebc773c40718bc1484da8ecd187'
+				ak: '<ak>',
+				sk: '<sk>'
 			},
 			endpoint: 'http://bj.bcebos.com',
-			bucket: 'transing',
-			objectUrlPrefix: 'http://transing.bj.bcebos.com'
-		},
-		aliyunOss: {
-		  accessKeyId: "B5XbMzCAn484ATTL",
-		  secretAccessKey: "ROyNOrsE6IztYiTM8qUe4V3PYIxKp2",
-		  endpoint: 'http://oss-cn-shenzhen.aliyuncs.com',
-		  apiVersion: '2013-10-15',
-		  bucket: 'xtrans',
-		  objectUrlPrefix: 'http://xtrans.oss-cn-shenzhen.aliyuncs.com'
+			bucket: '<your bucket>',
+			objectUrlPrefix: 'http://<your bucket>.bj.bcebos.com'
 		}
     }
 }
